@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间的值为dao层接口的权限定名 -->
+<mapper namespace="com.zhangzhaoyang.senior1.week1.dao.GoodsDao">
+	<select id="list" resultMap="goodsMap">
+		select * from tb_goods join tb_brand on tb_goods.bid=tb_brand.bid join tb_goodskind on tb_goods.kid=tb_goodskind.kid
+		<where>
+			<if test="null!=gname and gname!=''"> and gname like concat('%',#{gname},'%')</if>
+		</where>
+	</select>
+	
+	<resultMap type="Goods" id="goodsMap">
+		<id property="gid" column="gid"/>
+		<result property="gname" column="gname"/>
+		<result property="gengName" column="gengName"/>
+		<result property="size" column="size"/>
+		<result property="price" column="price"/>
+		<result property="num" column="num"/>
+		<result property="meett" column="meett"/>
+		<result property="phone" column="phone"/>
+		<association property="bid" column="bid" javaType="Brand">
+			<id property="bid" column="bid"/>
+			<result property="bname" column="bname"/>
+		</association>
+		<association property="kid" column="kid" javaType="GoodsKind">
+			<id property="kid" column="kid"/>
+			<result property="ktype" column="ktype"/>
+		</association>
+	</resultMap>
+	
+	<delete id="del">
+		delete from tb_goods where gid in(#{value})
+	</delete>
+	
+	<select id="toAddBrand" resultType="Brand">
+		select * from tb_brand
+	</select>
+	
+	<select id="toAddKind" resultType="GoodsKind">
+		select * from tb_goodskind
+	</select>
+	
+
+	
+</mapper>
